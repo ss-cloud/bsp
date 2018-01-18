@@ -1,6 +1,6 @@
 ![bsp](http://paituo.me/bsp1.png)
 
-**bsp是shadowsocks多用户、流量管理工具** 
+**bsp是shadowsocks多用户、流量、限时管理接口** 
 
 ---
 
