@@ -22,7 +22,3 @@ chmod 775 install
 截图:
 
 ![bsp](https://eddieby.top/bsp1.png)
-
-下面是笔者基于bsp/web分支做的shadowsocks小程序，我会在之后更新一些高质量的节点，欢迎大家使用！
-
-![bsp](https://eddieby.top/mm.jpg)
