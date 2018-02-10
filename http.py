@@ -44,26 +44,67 @@ def ping():
 @post('/create')
 def create():
     if not check_auth():
-        return 'no auth'
+        return 'error'
 
     port = request.params.get('port',None)
     password = request.params.get('password',None)
     bandwith = request.params.get('bandwith',None)
     if not port or not password or not bandwith:
-        return 'argument error'
+        return 'error'
     try:
         port = int(port)
         bandwith = int(bandwith)
     except Exception as e:
-        return 'argument error'
+        return 'error'
 
     if bandwith < 0 or bandwith > 200 * 1000:
-        return 'bandwith error'
+        return 'error'
 
     cmd = 'bsp -p %d -P %s -s %d -a -A -j'%(port,password,bandwith)
-    if os.system('bsp ') != 0:
-        return 'create 500'
+    if os.system(cmd) != 0:
+        return 'error'
     else:
         return 'create ok'
+
+@post('/delete')
+def delete():
+    if not check_auth():
+        return 'error'
+
+    port = request.params.get('port',None)
+    if not port:
+        return 'error'
+    try:
+        port = int(port)
+    except Exception as e:
+        return 'error'
+
+    cmd = 'bsp -p %d -d -D -R'%(port)
+    if os.system(cmd) != 0:
+        return 'error'
+    else:
+        return 'delete ok'
+
+@post('/query')
+def query():
+    if not check_auth():
+        return 'error'
+
+    port = request.params.get('port',None)
+    if not port:
+        return 'error'
+    try:
+        port = int(port)
+    except Exception as e:
+        return 'error'
+
+    cmd = 'bsp -p %d -c'%(port)
+    output = os.popen(cmd)
+    c = output.read()
+    if c == '':
+        return 'error'
+    else:
+        return c
+
 
 run(host='0.0.0.0', port=8081,reloader=True)
