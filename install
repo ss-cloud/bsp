@@ -26,6 +26,7 @@ def prepare():
 def install_ss():
     os.system('cd /tmp/shadowsocks-master && python setup.py install')
     os.system('cp /tmp/bsp-master/init.d/shadowsocks /etc/init.d/')
+    os.system("chmod 755 /etc/init.d/shadowsocks")
     os.system("cp /tmp/bsp-master/shadowsocks.json /etc/")
     os.system('update-rc.d shadowsocks defaults')
 
@@ -68,3 +69,4 @@ clean()
 start()
 
 print("install shadowsocks and bsp success,enjoy it!")
+os.system('cat /etc/bsp_server.json ')
