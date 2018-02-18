@@ -35,5 +35,4 @@ def clean():
     os.system('rm -rf /tmp/shadowsocks-master')
 
 download()
-clean()
 print("install bsp success,enjoy it!")
