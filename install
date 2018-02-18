@@ -1,13 +1,39 @@
 #!/usr/bin/env python
 import os
+import urllib
+
+remote_bsp_zip = 'https://github.com/ss-cloud/bsp/archive/master.zip'
+locate_bsp_zip = '/tmp/bsp.zip'
+
+remote_ss_zip = 'https://github.com/shadowsocks/shadowsocks/archive/master.zip'
+locate_ss_zip = '/tmp/shadowsocks.zip'
+
+
+def download():
+    print('downloading bsp zip...')
+    urllib.urlretrieve(remote_bsp_zip, locate_bsp_zip)
+    print('downloading ss zip...')
+    urllib.urlretrieve(remote_ss_zip, locate_ss_zip)
+    print('unzip to /tmp')
+    os.system('unzip -d /tmp %s > /dev/null' % locate_bsp_zip)
+    os.system('unzip -d /tmp %s > /dev/null' % locate_ss_zip)
+
 
 def install():
-    os.system("cp bsp /usr/bin/");
-    os.system("chmod 755 /usr/bin/bsp");
-    os.system("cp bsp_pid /usr/bin/");
-    os.system("cp byte_lib.py /usr/bin/");
-    os.system("mkdir /etc/byte/");
-    os.system("cp byte_ss.json /etc/byte/");
+    os.system("cp bsp /usr/bin/")
+    os.system("chmod 755 /usr/bin/bsp")
+    os.system("cp bsp_pid /usr/bin/")
+    os.system("cp byte_lib.py /usr/bin/")
+    os.system("mkdir /etc/byte/")
+    os.system("cp byte_ss.json /etc/byte/")
 
-install()
+
+def clean():
+    os.system('rm -rf %s' % locate_bsp_zip)
+    os.system('rm -rf %s' % locate_ss_zip)
+    os.system('rm -rf /tmp/bsp-master')
+    os.system('rm -rf /tmp/shadowsocks-master')
+
+download()
+clean()
 print("install bsp success,enjoy it!")
