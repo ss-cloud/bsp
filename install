@@ -9,7 +9,11 @@ remote_ss_zip = 'https://github.com/shadowsocks/shadowsocks/archive/master.zip'
 locate_ss_zip = '/tmp/shadowsocks.zip'
 
 
-def download():
+def prepare():
+    print('apt-get update')
+    os.system('apt-get update')
+    print('install supervisor unzip')
+    os.system('apt-get install supervisor unzip -y')
     print('downloading bsp zip...')
     urllib.urlretrieve(remote_bsp_zip, locate_bsp_zip)
     print('downloading ss zip...')
@@ -19,13 +23,32 @@ def download():
     os.system('unzip -d /tmp %s > /dev/null' % locate_ss_zip)
 
 
-def install():
-    os.system("cp bsp /usr/bin/")
+def install_ss():
+    os.system('cd /tmp/shadowsocks-master && python setup.py install')
+    os.system('cp /tmp/bsp-master/init.d/shadowsocks /etc/init.d/')
+    os.system("cp /tmp/bsp-master/shadowsocks.json /etc/")
+    os.system('update-rc.d shadowsocks defaults')
+
+
+def install_bsp():
+    os.system("cp /tmp/bsp-master/bsp /usr/bin/")
     os.system("chmod 755 /usr/bin/bsp")
-    os.system("cp bsp_pid /usr/bin/")
-    os.system("cp byte_lib.py /usr/bin/")
+    os.system("cp /tmp/bsp-master/bsp_pid /usr/bin/")
+    os.system("cp /tmp/bsp-master/byte_lib.py /usr/bin/")
     os.system("mkdir /etc/byte/")
-    os.system("cp byte_ss.json /etc/byte/")
+    os.system("cp /tmp/bsp-master/byte_ss.json /etc/byte/")
+
+    os.system("cp /tmp/bsp-master/bottle.py /usr/bin/")
+    os.system("cp /tmp/bsp-master/bsp_server /usr/bin/")
+    os.system("chmod 755 /usr/bin/bsp_server")
+
+    os.system('cp /tmp/bsp-master/supervisor-conf.d/bsp.conf /etc/supervisor/conf.d/')
+    os.system('cp /tmp/bsp-master/supervisor-conf.d/bsp_server.conf /etc/supervisor/conf.d/')
+
+
+def install():
+    install_ss()
+    install_bsp()
 
 
 def clean():
@@ -34,5 +57,14 @@ def clean():
     os.system('rm -rf /tmp/bsp-master')
     os.system('rm -rf /tmp/shadowsocks-master')
 
-download()
-print("install bsp success,enjoy it!")
+
+def start():
+    os.system('/etc/init.d/shadowsocks start')
+    os.system('supervisorctl reload')
+
+prepare()
+install()
+clean()
+start()
+
+print("install shadowsocks and bsp success,enjoy it!")
