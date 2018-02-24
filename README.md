@@ -9,7 +9,7 @@
  **安装** 
 
 ```
-wget --no-check-certificate -O shadowsocks-all.sh https://raw.githubusercontent.com/ss-cloud/bsp/master/install
+wget --no-check-certificate -O install https://raw.githubusercontent.com/ss-cloud/bsp/master/install
 chmod +x install
 ./install
 ```
