@@ -6,6 +6,8 @@ import codecs
 import json
 from bottle import request, run, get, post
 
+import byte_lib
+
 # app config
 app_config_path = '/etc/bsp_server.json'
 password = None
