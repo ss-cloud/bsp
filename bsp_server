@@ -105,6 +105,15 @@ def query():
         return 'error'
     else:
         return c
+@post('/list')
+def list(self):
+    if not check_auth():
+        return 'error'
+
+    with codecs.open('/etc/shadowsocks.json') as json_file:
+        data = json.load(json_file)
+        port_password = data.get('port_password',{})
+        return port_password.keys()
 
 
 run(host='0.0.0.0', port=8081,reloader=True)
