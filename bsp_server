@@ -64,6 +64,7 @@ def create():
     if os.system(cmd) != 0:
         return 'error'
     else:
+        os.system('supervisorctl restart bsp')
         return 'create ok'
 
 @post('/delete')
