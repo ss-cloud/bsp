@@ -87,6 +87,8 @@ def delete():
     if os.system(cmd) != 0:
         return 'error'
     else:
+        byte_lib.restart_ss()
+        os.system('supervisorctl restart bsp')
         return 'delete ok'
 
 @post('/query')
