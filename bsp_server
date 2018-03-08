@@ -66,6 +66,7 @@ def create():
     if os.system(cmd) != 0:
         return 'error'
     else:
+        byte_lib.restart_ss()
         os.system('supervisorctl restart bsp')
         return 'create ok'
 
