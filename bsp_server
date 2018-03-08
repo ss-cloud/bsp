@@ -105,8 +105,9 @@ def query():
         return 'error'
     else:
         return c
-@post('/list')
-def list(self):
+        
+@post('/ports')
+def ports(self):
     if not check_auth():
         return 'error'
 
