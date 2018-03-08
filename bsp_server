@@ -59,7 +59,7 @@ def create():
     except Exception as e:
         return 'error'
 
-    if bandwidth < 0 or bandwidth > 200 * 1000:
+    if bandwidth < 0 or bandwidth > 2000 * 1000:
         return 'error'
 
     cmd = 'bsp -p %d -P %s -s %d -a -A -j'%(port,password,bandwidth)
