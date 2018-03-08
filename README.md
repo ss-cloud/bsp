@@ -9,9 +9,8 @@
  **安装** 
 
 ```
-git clone https://github.com/edboffical/bsp.git
-cd bsp
-chmod 775 install
+wget --no-check-certificate -O install https://raw.githubusercontent.com/ss-cloud/bsp/master/install
+chmod +x install
 ./install
 ```
 
