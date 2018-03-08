@@ -50,19 +50,19 @@ def create():
 
     port = request.params.get('port',None)
     password = request.params.get('password',None)
-    bandwith = request.params.get('bandwith',None)
-    if not port or not password or not bandwith:
+    bandwidth = request.params.get('bandwidth',None)
+    if not port or not password or not bandwidth:
         return 'error'
     try:
         port = int(port)
-        bandwith = int(bandwith)
+        bandwidth = int(bandwidth)
     except Exception as e:
         return 'error'
 
-    if bandwith < 0 or bandwith > 200 * 1000:
+    if bandwidth < 0 or bandwidth > 200 * 1000:
         return 'error'
 
-    cmd = 'bsp -p %d -P %s -s %d -a -A -j'%(port,password,bandwith)
+    cmd = 'bsp -p %d -P %s -s %d -a -A -j'%(port,password,bandwidth)
     if os.system(cmd) != 0:
         return 'error'
     else:
