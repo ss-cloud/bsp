@@ -123,4 +123,4 @@ def ports():
         return {'ports':port_password.keys()}
 
 
-run(host='0.0.0.0', port=8081,reloader=True)
+run(host='0.0.0.0', port=8081)
