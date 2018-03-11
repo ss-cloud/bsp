@@ -42,21 +42,21 @@ for op, value in opts:
     elif op == "-r":
         byte_lib.add_rules_from_limit()
     elif op == "--start":
-        with open('bsp_pid', 'a+') as f:
-            pid = f.readline()
-        f.close()
-        res = os.popen("ps -aux | grep 'bsp'|awk '{print $12}'")
-        res = res.read()
-        if pid != "" and res.count('/usr/bin/bsp') > 1:
-            sys.exit('bsp already start on pid ' + str(pid) + ' [\033[1;32msuccess\033[0m]')
-        else:
-            pid = os.fork()
-            if pid > 0:
-                with open('bsp_pid', 'w+') as f:
-                    f.write(str(pid))
-                f.close()
-                sys.exit('bsp already start on new pid ' + str(pid) + ' [\033[1;32msuccess\033[0m]')
-            byte_lib.start()
+        # with open('bsp_pid', 'a+') as f:
+        #     pid = f.readline()
+        # f.close()
+        # res = os.popen("ps -aux | grep 'bsp'|awk '{print $12}'")
+        # res = res.read()
+        # if pid != "" and res.count('/usr/bin/bsp') > 1:
+        #     sys.exit('bsp already start on pid ' + str(pid) + ' [\033[1;32msuccess\033[0m]')
+        # else:
+        #     pid = os.fork()
+        #     if pid > 0:
+        #         with open('bsp_pid', 'w+') as f:
+        #             f.write(str(pid))
+        #         f.close()
+        #         sys.exit('bsp already start on new pid ' + str(pid) + ' [\033[1;32msuccess\033[0m]')
+        byte_lib.start()
     elif op == "--stop":
         with open('bsp_pid', 'a+') as f:
             pid = f.readline()
