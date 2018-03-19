@@ -1,0 +1,71 @@
+#!/usr/bin/env python
+
+import os
+import json
+import codecs
+import urllib
+import logging
+import urllib2
+
+def check_update():
+    bsp_version_file = '/etc/bsp_version'
+    lv = 0
+    if os.path.exists(bsp_version_file):
+        with codecs.open(bsp_version_file) as bsp_file:
+            lv = bsp_file
+
+    logging.info('local version:%s'%lv)
+    try:
+        f = urllib2.urlopen('https://raw.githubusercontent.com/ss-cloud/bsp/master/version')
+        rv = f.read()
+        logging.info('remote version:%s'%rv)
+        if rv > lv:
+            do_update()
+    except Exception as e:
+        raise
+
+def do_update():
+    print('downloading bsp zip...')
+    urllib.urlretrieve(remote_bsp_zip, locate_bsp_zip)
+    print('downloading ss zip...')
+    urllib.urlretrieve(remote_ss_zip, locate_ss_zip)
+    print('unzip to /tmp')
+    os.system('unzip -d /tmp %s > /dev/null' % locate_bsp_zip)
+    os.system('unzip -d /tmp %s > /dev/null' % locate_ss_zip)
+
+    os.system("cp /tmp/bsp-master/bsp /usr/bin/")
+    os.system("chmod 755 /usr/bin/bsp")
+    os.system("cp /tmp/bsp-master/bsp_pid /usr/bin/")
+    os.system("cp /tmp/bsp-master/byte_lib.py /usr/bin/")
+
+    os.system("cp /tmp/bsp-master/version /etc/bsp_version")
+    os.system("cp /tmp/bsp-master/bsp_server /usr/bin/")
+    os.system("chmod 755 /usr/bin/bsp_server")
+
+    os.system('cp /tmp/bsp-master/supervisor-conf.d/bsp.conf /etc/supervisor/conf.d/')
+    os.system('cp /tmp/bsp-master/supervisor-conf.d/bsp_server.conf /etc/supervisor/conf.d/')
+
+def check_bsp_server():
+    password = None
+    app_config_path = '/etc/bsp_server.json'
+    with codecs.open(app_config_path) as json_file:
+        data = json.load(json_file)
+        password = data.get('password',None)
+    try:
+        query_args = { 'key':password }
+
+        # This urlencodes your data (that's why we need to import urllib at the top)
+        data = urllib.urlencode(query_args)
+        # Send HTTP POST request
+        request = urllib2.Request('http://localhost:8081/ping', data)
+
+        f = urllib2.urlopen(request,timeout=5)
+    except Exception as e:
+        pass
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO,
+                format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+                datefmt='%a, %d %b %Y %H:%M:%S')
+    check_update()
+    check_bsp_server()

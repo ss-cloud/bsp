@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import urllib
+import time
 
 remote_bsp_zip = 'https://github.com/ss-cloud/bsp/archive/master.zip'
 locate_bsp_zip = '/tmp/bsp.zip'
@@ -63,10 +64,12 @@ def start():
     os.system('/etc/init.d/shadowsocks start')
     os.system('supervisorctl reload')
 
-prepare()
-install()
-clean()
-start()
+if __name__ == '__main__':
+    prepare()
+    install()
+    clean()
+    start()
 
-print("install shadowsocks and bsp success,enjoy it!")
-os.system('cat /etc/bsp_server.json ')
+    print("install shadowsocks and bsp success,enjoy it!")
+    time.sleep(3)
+    os.system('cat /etc/bsp_server.json ')
