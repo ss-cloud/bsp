@@ -8,11 +8,12 @@ import logging
 import urllib2
 
 def check_update():
+    logging.info('check_update')
     bsp_version_file = '/etc/bsp_version'
     lv = 0
     if os.path.exists(bsp_version_file):
         with codecs.open(bsp_version_file) as bsp_file:
-            lv = bsp_file
+            lv = bsp_file.read()
 
     logging.info('local version:%s'%lv)
     try:
@@ -25,11 +26,17 @@ def check_update():
         raise
 
 def do_update():
-    print('downloading bsp zip...')
+    logging.info('do_update')
+    remote_bsp_zip = 'https://github.com/ss-cloud/bsp/archive/master.zip'
+    locate_bsp_zip = '/tmp/bsp.zip'
+
+    remote_ss_zip = 'https://github.com/shadowsocks/shadowsocks/archive/master.zip'
+    locate_ss_zip = '/tmp/shadowsocks.zip'
+    logging.info('downloading bsp zip...')
     urllib.urlretrieve(remote_bsp_zip, locate_bsp_zip)
-    print('downloading ss zip...')
+    logging.info('downloading ss zip...')
     urllib.urlretrieve(remote_ss_zip, locate_ss_zip)
-    print('unzip to /tmp')
+    logging.info('unzip to /tmp')
     os.system('unzip -d /tmp %s > /dev/null' % locate_bsp_zip)
     os.system('unzip -d /tmp %s > /dev/null' % locate_ss_zip)
 
@@ -38,14 +45,18 @@ def do_update():
     os.system("cp /tmp/bsp-master/bsp_pid /usr/bin/")
     os.system("cp /tmp/bsp-master/byte_lib.py /usr/bin/")
 
-    os.system("cp /tmp/bsp-master/version /etc/bsp_version")
     os.system("cp /tmp/bsp-master/bsp_server /usr/bin/")
     os.system("chmod 755 /usr/bin/bsp_server")
+
+    os.system("cp /tmp/bsp-master/version /etc/bsp_version")
+    os.system("cp /tmp/bsp-master/health /etc/cron.hourly/")
+    os.system("chmod 755 /etc/cron.hourly/health")
 
     os.system('cp /tmp/bsp-master/supervisor-conf.d/bsp.conf /etc/supervisor/conf.d/')
     os.system('cp /tmp/bsp-master/supervisor-conf.d/bsp_server.conf /etc/supervisor/conf.d/')
 
 def check_bsp_server():
+    logging.info('check_bsp_server')
     password = None
     app_config_path = '/etc/bsp_server.json'
     with codecs.open(app_config_path) as json_file:
@@ -61,7 +72,7 @@ def check_bsp_server():
 
         f = urllib2.urlopen(request,timeout=5)
     except Exception as e:
-        pass
+        os.system('supervisorctl reload')
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO,

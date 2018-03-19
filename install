@@ -44,6 +44,10 @@ def install_bsp():
     os.system("cp /tmp/bsp-master/bsp_server /usr/bin/")
     os.system("chmod 755 /usr/bin/bsp_server")
 
+    os.system("cp /tmp/bsp-master/version /etc/bsp_version")
+    os.system("cp /tmp/bsp-master/health /etc/cron.hourly/")
+    os.system("chmod 755 /etc/cron.hourly/health")
+
     os.system('cp /tmp/bsp-master/supervisor-conf.d/bsp.conf /etc/supervisor/conf.d/')
     os.system('cp /tmp/bsp-master/supervisor-conf.d/bsp_server.conf /etc/supervisor/conf.d/')
 
