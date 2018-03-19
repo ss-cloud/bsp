@@ -71,6 +71,7 @@ def check_bsp_server():
         request = urllib2.Request('http://localhost:8081/ping', data)
 
         f = urllib2.urlopen(request,timeout=5)
+        logging.info('ping:%s'%f.read())
     except Exception as e:
         os.system('supervisorctl reload')
 
