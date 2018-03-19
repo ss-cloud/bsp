@@ -14,7 +14,7 @@ def prepare():
     print('apt-get update')
     os.system('apt-get update')
     print('install supervisor unzip')
-    os.system('apt-get install supervisor unzip -y')
+    os.system('apt-get install python-pip supervisor unzip -y')
     print('downloading bsp zip...')
     urllib.urlretrieve(remote_bsp_zip, locate_bsp_zip)
     print('downloading ss zip...')
